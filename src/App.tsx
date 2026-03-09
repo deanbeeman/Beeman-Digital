@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Code2, RefreshCcw, LineChart } from "lucide-react";
 
 export default function BeemanDigitalWebsite() {
   const [formData, setFormData] = useState({
@@ -12,11 +11,11 @@ export default function BeemanDigitalWebsite() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
     setIsSubmitting(true);
@@ -62,8 +61,8 @@ ${formData.message}`
 
       setShowSuccess(true);
       setFormData({ name: "", businessName: "", email: "", message: "" });
-    } catch (error) {
-      setErrorMessage(error.message || "Something went wrong. Please try again.");
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -71,19 +70,19 @@ ${formData.message}`
   const services = [
     {
       title: "Website Development",
-      icon: Code2,
+      icon: "code",
       description:
         "Custom websites for small businesses that are fast, mobile-friendly, professionally designed, and built to turn visitors into customers.",
     },
     {
       title: "Website Redesign",
-      icon: RefreshCcw,
+      icon: "refresh",
       description:
         "Modernize outdated websites with cleaner design, stronger messaging, improved performance, and a more credible online presence.",
     },
     {
       title: "Digital Consulting + SEO",
-      icon: LineChart,
+      icon: "chart",
       description:
         "Practical guidance on SEO, visibility, conversions, and digital growth—because strong online performance starts with a strong website foundation.",
     },
@@ -335,14 +334,32 @@ ${formData.message}`
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {services.map((service) => {
-              const Icon = service.icon;
               return (
                 <div
                   key={service.title}
                   className="group rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-8 shadow-lg shadow-black/10 transition duration-300 hover:-translate-y-1 hover:border-blue-400/30 hover:bg-white/[0.06]"
                 >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400/30 to-cyan-300/20">
-                    <Icon size={22} className="text-blue-300" />
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400/30 to-cyan-300/20 text-blue-300">
+                    {service.icon === "code" && (
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                      </svg>
+                    )}
+                    {service.icon === "refresh" && (
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M21 2v6h-6" />
+                        <path d="M3 12a9 9 0 0 1 15.55-6.36L21 8" />
+                        <path d="M3 22v-6h6" />
+                        <path d="M21 12a9 9 0 0 1-15.55 6.36L3 16" />
+                      </svg>
+                    )}
+                    {service.icon === "chart" && (
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M3 3v18h18" />
+                        <path d="M7 14l4-4 3 3 5-7" />
+                      </svg>
+                    )}
                   </div>
                   <h3 className="text-2xl font-semibold text-white">{service.title}</h3>
                   <p className="mt-4 leading-7 text-slate-400">{service.description}</p>
